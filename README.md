@@ -1,6 +1,6 @@
 ## Lenslight Fotoğraf Uygulaması
 
-Bir uygulama yaparak node.js öğrenmeye çalışıyorum.Bu projede aşağıdaki yapıları genel hatlarıyla öğrendim.
+Bir uygulama yaparak node.js öğrenmeye çalışıyorum. Bu projede aşağıdaki yapıları genel hatlarıyla öğrendim.
 
 - Node.JS
 - Node.JS CRUD İşlemleri
