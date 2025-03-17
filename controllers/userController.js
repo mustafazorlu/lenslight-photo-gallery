@@ -5,16 +5,26 @@ import jwt from "jsonwebtoken";
 const createUser = async (req, res) => {
     try {
         const user = await User.create(req.body);
-
-        res.status(201).json({
-            succeded: true,
-            user,
-        });
+        res.redirect("/login");
+        // res.status(201).json({
+        //     succeded: true,
+        //     user,
+        // });
     } catch (error) {
         res.status(500).json({
             succeded: false,
             error,
         });
+
+        let errors2 = {};
+
+        if (error.name === "ValidationError") {
+            Object.keys(error.errors).forEach((key) => {
+                errors2[key] = error.errors[key].message;
+            });
+        }
+
+        res.status(400).json(errors2);
     }
 };
 
@@ -33,10 +43,13 @@ const loginUser = async (req, res) => {
         }
 
         if (same) {
-            res.status(200).json({
-                user,
-                token:createToken(user._id)
+            const token = createToken(user._id);
+            res.cookie("jsonwebtoken", token, {
+                httpOnly: true,
+                maxAge: 1000 * 60 * 60 * 24,
             });
+
+            res.redirect("/users/dashboard");
         } else {
             res.status(401).json({
                 succeded: false,
@@ -52,9 +65,15 @@ const loginUser = async (req, res) => {
 };
 
 const createToken = (userId) => {
-    return jwt.sign({userId}, process.env.JWT_SECRET,{
-        expiresIn:"1d"
+    return jwt.sign({ userId }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
     });
 };
 
-export { createUser, loginUser };
+const getDashboardPage = (req, res) => {
+    res.render("dashboard", {
+        link: "dashboard",
+    });
+};
+
+export { createUser, loginUser, getDashboardPage };

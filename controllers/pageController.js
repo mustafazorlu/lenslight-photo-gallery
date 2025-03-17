@@ -18,5 +18,11 @@ const getLoginPage = (req, res) => {
         link: "login",
     });
 };
+const getLogout = (req, res) => {
+    res.cookie("jsonwebtoken", "", {
+        maxAge: 1,
+    });
+    res.redirect("/");
+};
 
-export { getIndexPage, getAboutPage, getLoginPage, getRegisterPage };
+export { getIndexPage, getAboutPage, getLogout, getLoginPage, getRegisterPage };
